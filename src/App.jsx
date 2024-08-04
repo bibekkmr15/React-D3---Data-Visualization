@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import ScaterplotGraph from "./components/ScaterplotGraph";
+import IntensityGraph from "./components/IntensityGraph";
+// import Temp from "./components/Temp";
 
 function App() {
   const [data, setData] = useState(null);
@@ -30,11 +31,10 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center ">
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <p className="text-xl ">BC Internship Project</p>
-      {data && (
-        <ScaterplotGraph data={data} xData={"intensity"} yData={"published"} />
-      )}
+      {/* <h1 className="text-3xl font-bold underline">Hello world!</h1> */}
+      <h1 className="text-3xl font-bold ">BC Internship Project</h1>
+      {data && <IntensityGraph data={data} />}
+      {/* <Temp /> */}
     </div>
   );
 }

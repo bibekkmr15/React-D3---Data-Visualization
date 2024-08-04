@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import Drawer from "./CustomDrawer";
 
-export default function ScaterplotGraph({ data }) {
+export default function Intensity({ data }) {
   const [selectedData, setSelectedData] = useState(null);
 
+  // console.log(typeof data[0].published);
   const svgRef = useRef();
 
-  const xAxisArray = data.map((item) => item.intensity);
+  const intensityArray = data.map((item) => item.intensity);
   const publishedArray = data.map((item) => new Date(item.published));
 
   const width = window.innerWidth * 0.8;
@@ -20,7 +22,7 @@ export default function ScaterplotGraph({ data }) {
 
     const x = d3
       .scaleLinear()
-      .domain([d3.min(xAxisArray) - 1, d3.max(xAxisArray) + 1])
+      .domain([d3.min(intensityArray) - 1, d3.max(intensityArray) + 1])
       .range([margin.left, width - margin.right]);
 
     const y = d3
@@ -38,6 +40,8 @@ export default function ScaterplotGraph({ data }) {
       .attr("fill", "#000")
       .attr("x", width / 2)
       .attr("y", 35)
+      .attr("font-weight", "bold")
+      .style("font-size", "18px")
       .text("Intensity");
 
     svg
@@ -49,7 +53,10 @@ export default function ScaterplotGraph({ data }) {
       .attr("transform", "rotate(-90)")
       .attr("y", -40)
       .attr("x", -height / 2)
+      .attr("dx", "-0.8em")
       .attr("dy", "0.71em")
+      .style("font-size", "18px")
+      .attr("font-weight", "bold")
       .text("Published Date");
 
     svg
@@ -95,24 +102,26 @@ export default function ScaterplotGraph({ data }) {
       .on("mouseout", () => tooltip.style("display", "none"));
   }, [data]);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!svgRef.current.contains(event.target)) {
-        setSelectedData(null);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (!svgRef.current.contains(event.target)) {
+  //       setSelectedData(null);
+  //     }
+  //   };
 
-    document.addEventListener("click", handleClickOutside);
+  //   document.addEventListener("click", handleClickOutside);
 
-    // Cleanup the event listener on component unmount
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+  //   // Cleanup the event listener on component unmount
+  //   return () => {
+  //     document.removeEventListener("click", handleClickOutside);
+  //   };
+  // }, []);
 
   return (
     <div>
-      <h2>Intensity vs. Published Date Graph</h2>
+      <h2 className="text-1xl text-center">
+        Intensity vs. Published Date Graph
+      </h2>
       <svg
         ref={svgRef}
         width={width}
@@ -121,10 +130,18 @@ export default function ScaterplotGraph({ data }) {
         className="bg-red-300"
       ></svg>
       {selectedData && (
-        <div>
-          <h3>Details:</h3>
-          <p>Intensity: {selectedData.intensity}</p>
-          <p>Published: {Date(selectedData.published)}</p>
+        <div className="container">
+          <Drawer data={selectedData} />
+
+          <p>
+            {" "}
+            <strong>Intensity: </strong>
+            {selectedData.intensity}
+          </p>
+          <p>
+            <strong>Publish Date: </strong>
+            {new Date(selectedData.published).toLocaleDateString()}
+          </p>
         </div>
       )}
     </div>
