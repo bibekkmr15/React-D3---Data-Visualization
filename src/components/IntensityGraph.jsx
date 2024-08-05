@@ -67,7 +67,7 @@ export default function Intensity({ data }) {
       .attr("cx", (d) => x(new Date(d.published)))
       .attr("cy", (d) => y(d.intensity))
       .attr("r", 5)
-      .attr("opacity", 0.2)
+      .attr("opacity", 0.3)
       .attr("fill", "steelblue")
       .on("click", (event, d) => {
         setSelectedData(d);
