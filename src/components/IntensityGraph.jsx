@@ -5,7 +5,6 @@ import CustomDrawer from "./CustomDrawer";
 export default function Intensity({ data }) {
   const [selectedData, setSelectedData] = useState(null);
 
-  // console.log(typeof data[0].published);
   const svgRef = useRef();
   const detailButtonRef = useRef();
 
@@ -22,13 +21,13 @@ export default function Intensity({ data }) {
     const margin = { top: 20, right: 20, bottom: 40, left: 50 };
 
     const x = d3
-      .scaleLinear()
-      .domain([d3.min(intensityArray) - 1, d3.max(intensityArray) + 1])
+      .scaleTime()
+      .domain(d3.extent(publishedArray))
       .range([margin.left, width - margin.right]);
 
     const y = d3
-      .scaleTime()
-      .domain(d3.extent(publishedArray))
+      .scaleLinear()
+      .domain([d3.min(intensityArray) - 1, d3.max(intensityArray) + 1])
       .range([height - margin.bottom, margin.top]);
 
     svg.selectAll("*").remove();
@@ -43,7 +42,7 @@ export default function Intensity({ data }) {
       .attr("y", 35)
       .attr("font-weight", "bold")
       .style("font-size", "18px")
-      .text("Intensity");
+      .text("Published Date");
 
     svg
       .append("g")
@@ -58,15 +57,15 @@ export default function Intensity({ data }) {
       .attr("dy", "0.71em")
       .style("font-size", "18px")
       .attr("font-weight", "bold")
-      .text("Published Date");
+      .text("Intensity");
 
     svg
       .selectAll("circle")
       .data(data)
       .enter()
       .append("circle")
-      .attr("cx", (d) => x(d.intensity))
-      .attr("cy", (d) => y(new Date(d.published)))
+      .attr("cx", (d) => x(new Date(d.published)))
+      .attr("cy", (d) => y(d.intensity))
       .attr("r", 5)
       .attr("opacity", 0.2)
       .attr("fill", "steelblue")
