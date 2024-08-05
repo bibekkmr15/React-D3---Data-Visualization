@@ -2,38 +2,57 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 
 const FilterComponent = ({ data, setDataForGraph }) => {
+  const [year, setYear] = useState("");
   const [intensity, setIntensity] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
 
-  const handleFilterChange = (e) => {
-    const value = e.target.value;
-    setIntensity(value);
+  const handleYearChange = (e) => {
+    setYear(e.target.value);
+  };
 
-    const newFilteredData = data.filter(
-      (item) => item.intensity === parseInt(value, 10)
-    );
-    setFilteredData(newFilteredData);
+  const handleIntensityChange = (e) => {
+    setIntensity(e.target.value);
   };
 
   const handleFilterSubmit = (e) => {
     e.preventDefault();
-    setDataForGraph(filteredData);
+
+    const newFilteredData = data.filter((item) => {
+      const publishedYear = new Date(item.published).getFullYear();
+      const matchesYear = year ? publishedYear.toString() === year : true;
+      const matchesIntensity = intensity
+        ? item.intensity === parseInt(intensity, 10)
+        : true;
+      return matchesYear && matchesIntensity;
+    });
+
+    setDataForGraph(newFilteredData);
   };
 
   return (
-    <div>
-      <h1>Filter Data by Intensity</h1>
-      <form>
+    <div className="flex mt-6">
+      <h2 className="text-xl font-bold ">Filter Data</h2>
+      <form onSubmit={handleFilterSubmit} className="flex ml-10">
         <label>
-          Intensity:
+          <strong className="mr-2">Published Year:</strong>
+          <input
+            type="number"
+            value={year}
+            onChange={handleYearChange}
+            placeholder="Enter published year"
+          />
+        </label>
+        <br />
+        <label>
+          <strong className="mr-2">Intensity:</strong>
           <input
             type="number"
             value={intensity}
-            onChange={handleFilterChange}
+            onChange={handleIntensityChange}
             placeholder="Enter intensity"
           />
         </label>
-        <Button onClick={handleFilterSubmit}>Filter Data</Button>
+        <br />
+        <Button type="submit">Filter Data</Button>
       </form>
     </div>
   );
