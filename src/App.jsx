@@ -18,14 +18,6 @@ function App() {
       .then((dataFromDB) => {
         setData(dataFromDB);
         setDataForGraph(dataFromDB);
-
-        // // Convert each date string to a Date object and filter by year
-        // const filteredData = data.filter((dateString) => {
-        //   const date = new Date(dateString.published);
-        //   return date.getFullYear() === 2017;
-        // });
-
-        // setData(filteredData);
       })
       .catch((error) => {
         console.error("Fetch error:", error);

@@ -133,6 +133,7 @@ export default function Intensity({ data }) {
         style={{ overflow: "visible" }}
         className="bg-red-300"
       ></svg>
+      <p>Click on the circle to see details</p>
       {selectedData && (
         <div className="container flex items-center justify-evenly mt-4 ">
           <p>
