@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-import Drawer from "./CustomDrawer";
+import CustomDrawer from "./CustomDrawer";
 
 export default function Intensity({ data }) {
   const [selectedData, setSelectedData] = useState(null);
 
   // console.log(typeof data[0].published);
   const svgRef = useRef();
+  const detailButtonRef = useRef();
 
   const intensityArray = data.map((item) => item.intensity);
   const publishedArray = data.map((item) => new Date(item.published));
@@ -102,20 +103,24 @@ export default function Intensity({ data }) {
       .on("mouseout", () => tooltip.style("display", "none"));
   }, [data]);
 
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (!svgRef.current.contains(event.target)) {
-  //       setSelectedData(null);
-  //     }
-  //   };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        !svgRef.current.contains(event.target) &&
+        !detailButtonRef.current?.contains(event.target)
+      ) {
+        // console.log(event.target);
+        setSelectedData(null);
+      }
+    };
 
-  //   document.addEventListener("click", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
 
-  //   // Cleanup the event listener on component unmount
-  //   return () => {
-  //     document.removeEventListener("click", handleClickOutside);
-  //   };
-  // }, []);
+    // Cleanup the event listener on component unmount
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div>
@@ -130,11 +135,8 @@ export default function Intensity({ data }) {
         className="bg-red-300"
       ></svg>
       {selectedData && (
-        <div className="container">
-          <Drawer data={selectedData} />
-
+        <div className="container flex items-center justify-evenly mt-4 ">
           <p>
-            {" "}
             <strong>Intensity: </strong>
             {selectedData.intensity}
           </p>
@@ -142,6 +144,7 @@ export default function Intensity({ data }) {
             <strong>Publish Date: </strong>
             {new Date(selectedData.published).toLocaleDateString()}
           </p>
+          <CustomDrawer data={selectedData} ref={detailButtonRef} />
         </div>
       )}
     </div>

@@ -11,31 +11,30 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-export default function CustomDrawer({ data }) {
+import { forwardRef } from "react";
+import CustomTable from "./CustomTable";
+
+const CustomDrawer = forwardRef(({ data }, ref) => {
   return (
     <Drawer>
-      <Button>
+      <Button ref={ref}>
         <DrawerTrigger>Click here to see Details</DrawerTrigger>
       </Button>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Selected Data Details</DrawerTitle>
           <DrawerDescription>
-            <ul>
-              {Object.entries(data).map(([key, value]) => (
-                <li key={key}>
-                  <strong>{key}:</strong> {value}
-                </li>
-              ))}
-            </ul>
+            <CustomTable data={data} />
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
           <DrawerClose>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline">Click anywhere to Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );
-}
+});
+
+export default CustomDrawer;
