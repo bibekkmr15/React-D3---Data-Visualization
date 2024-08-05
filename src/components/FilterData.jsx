@@ -15,19 +15,26 @@ const FilterComponent = ({ data, setDataForGraph }) => {
     setFilteredData(newFilteredData);
   };
 
+  const handleFilterSubmit = (e) => {
+    e.preventDefault();
+    setDataForGraph(filteredData);
+  };
+
   return (
     <div>
       <h1>Filter Data by Intensity</h1>
-      <label>
-        Intensity:
-        <input
-          type="number"
-          value={intensity}
-          onChange={handleFilterChange}
-          placeholder="Enter intensity"
-        />
-      </label>
-      <Button onClick={() => setDataForGraph(filteredData)}>Filter Data</Button>
+      <form>
+        <label>
+          Intensity:
+          <input
+            type="number"
+            value={intensity}
+            onChange={handleFilterChange}
+            placeholder="Enter intensity"
+          />
+        </label>
+        <Button onClick={handleFilterSubmit}>Filter Data</Button>
+      </form>
     </div>
   );
 };
