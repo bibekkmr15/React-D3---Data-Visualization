@@ -1,11 +1,28 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import { Button } from "./ui/button";
 import CustomSelect from "./CustomSelect";
 
+const initialState = {
+  year: "",
+  intensity: "",
+  sector: "",
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "SET_YEAR":
+      return { ...state, year: action.payload };
+    case "SET_INTENSITY":
+      return { ...state, intensity: action.payload };
+    case "SET_SECTOR":
+      return { ...state, sector: action.payload };
+    default:
+      return state;
+  }
+};
+
 const FilterData = ({ data, setDataForGraph }) => {
-  const [year, setYear] = useState("");
-  const [intensity, setIntensity] = useState("");
-  const [sector, setSector] = useState("");
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const uniqueSectors = [
     ...new Set(
@@ -13,25 +30,19 @@ const FilterData = ({ data, setDataForGraph }) => {
     ),
   ];
 
-  const handleYearChange = (e) => {
-    setYear(e.target.value);
-  };
-
-  const handleIntensityChange = (e) => {
-    setIntensity(e.target.value);
-  };
-
   const handleFilterSubmit = (e) => {
     e.preventDefault();
 
     const newFilteredData = data.filter((item) => {
       const publishedYear = new Date(item.published).getFullYear();
-      const matchesYear = year ? publishedYear.toString() === year : true;
-      const matchesIntensity = intensity
-        ? item.intensity === parseInt(intensity, 10)
+      const matchesYear = state.year
+        ? publishedYear.toString() === state.year
+        : true;
+      const matchesIntensity = state.intensity
+        ? item.intensity === parseInt(state.intensity, 10)
         : true;
       let matchesSector = false;
-      if (sector === "All Sectors" || item.sector === sector) {
+      if (state.sector === "All Sectors" || item.sector === state.sector) {
         matchesSector = true;
       }
       return matchesYear && matchesIntensity && matchesSector;
@@ -49,7 +60,9 @@ const FilterData = ({ data, setDataForGraph }) => {
           <strong className="mr-2">Sector:</strong>
           <CustomSelect
             options={["All Sectors", ...uniqueSectors]}
-            setValue={setSector}
+            setValue={(value) =>
+              dispatch({ type: "SET_SECTOR", payload: value })
+            }
             placeholder="Select sector"
           />
         </label>
@@ -58,8 +71,10 @@ const FilterData = ({ data, setDataForGraph }) => {
           <strong className="mr-2">Published Year:</strong>
           <input
             type="number"
-            value={year}
-            onChange={handleYearChange}
+            value={state.year}
+            onChange={(e) =>
+              dispatch({ type: "SET_YEAR", payload: e.target.value })
+            }
             placeholder="Enter published year"
           />
         </label>
@@ -68,8 +83,10 @@ const FilterData = ({ data, setDataForGraph }) => {
           <strong className="mr-2">Intensity:</strong>
           <input
             type="number"
-            value={intensity}
-            onChange={handleIntensityChange}
+            value={state.intensity}
+            onChange={(e) =>
+              dispatch({ type: "SET_INTENSITY", payload: e.target.value })
+            }
             placeholder="Enter intensity"
           />
         </label>
