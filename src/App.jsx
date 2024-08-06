@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ScatterPlotGraph from "./components/ScatterPlotGraph";
 // import Temp from "./components/Temp";
 import FilterData from "./components/FilterData";
+import SelectAxes from "./components/SelectAxes";
 
 function App() {
   const [data, setData] = useState(null);
@@ -32,12 +33,8 @@ function App() {
 
       {dataForGraph && (
         <>
-          <FilterData
-            data={data}
-            setDataForGraph={setDataForGraph}
-            setXAxis={setXAxis}
-            setYAxis={setYAxis}
-          />
+          <SelectAxes setXAxis={setXAxis} setYAxis={setYAxis} />
+          <FilterData data={data} setDataForGraph={setDataForGraph} />
           <ScatterPlotGraph data={dataForGraph} xAxis={xAxis} yAxis={yAxis} />
         </>
       )}

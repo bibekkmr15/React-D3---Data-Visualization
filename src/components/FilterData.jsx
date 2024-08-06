@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
-import SelectAxes from "./SelectAxes";
 
-const FilterComponent = ({ data, setDataForGraph, setXAxis, setYAxis }) => {
+const FilterComponent = ({ data, setDataForGraph }) => {
   const [year, setYear] = useState("");
   const [intensity, setIntensity] = useState("");
 
@@ -34,7 +33,6 @@ const FilterComponent = ({ data, setDataForGraph, setXAxis, setYAxis }) => {
       <h2 className="text-xl font-bold ">Filter Data</h2>
 
       <form onSubmit={handleFilterSubmit} className="flex ml-10">
-        <SelectAxes setXAxis={setXAxis} setYAxis={setYAxis} />
         <label>
           <strong className="mr-2">Published Year:</strong>
           <input
@@ -55,7 +53,7 @@ const FilterComponent = ({ data, setDataForGraph, setXAxis, setYAxis }) => {
           />
         </label>
         <br />
-        <Button type="submit">Filter Data</Button>
+        <Button type="submit">Redraw Graph</Button>
       </form>
     </div>
   );
