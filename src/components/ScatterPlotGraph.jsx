@@ -2,17 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import CustomDrawer from "./CustomDrawer";
 
-export default function Intensity({ data }) {
+export default function ScatterPlotGraph({ data, xAxis, yAxis }) {
   const [selectedData, setSelectedData] = useState(null);
 
   const svgRef = useRef();
   const detailButtonRef = useRef();
 
-  const intensityArray = data.map((item) => item.intensity);
-  const publishedArray = data.map((item) => new Date(item.published));
+  const xAxisCapitalize = xAxis.charAt(0).toUpperCase() + xAxis.slice(1);
+  const yAxisCapitalize = yAxis.charAt(0).toUpperCase() + yAxis.slice(1);
+
+  const yAxisArray = data.map((item) => item[yAxis]);
+  const xAxisArray = data.map((item) => new Date(item[xAxis]));
 
   const width = window.innerWidth * 0.8;
-  const height = window.innerHeight * 0.8;
+  const height = window.innerHeight * 0.7;
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -22,12 +25,12 @@ export default function Intensity({ data }) {
 
     const x = d3
       .scaleTime()
-      .domain(d3.extent(publishedArray))
+      .domain(d3.extent(xAxisArray))
       .range([margin.left, width - margin.right]);
 
     const y = d3
       .scaleLinear()
-      .domain([d3.min(intensityArray) - 1, d3.max(intensityArray) + 1])
+      .domain([d3.min(yAxisArray) - 1, d3.max(yAxisArray) + 1])
       .range([height - margin.bottom, margin.top]);
 
     svg.selectAll("*").remove();
@@ -42,7 +45,7 @@ export default function Intensity({ data }) {
       .attr("y", 35)
       .attr("font-weight", "bold")
       .style("font-size", "18px")
-      .text("Published Date");
+      .text(`${xAxisCapitalize} Date`);
 
     svg
       .append("g")
@@ -57,15 +60,15 @@ export default function Intensity({ data }) {
       .attr("dy", "0.71em")
       .style("font-size", "18px")
       .attr("font-weight", "bold")
-      .text("Intensity");
+      .text(yAxisCapitalize);
 
     svg
       .selectAll("circle")
       .data(data)
       .enter()
       .append("circle")
-      .attr("cx", (d) => x(new Date(d.published)))
-      .attr("cy", (d) => y(d.intensity))
+      .attr("cx", (d) => x(new Date(d[xAxis])))
+      .attr("cy", (d) => y(d[yAxis]))
       .attr("r", 5)
       .attr("opacity", 0.3)
       .attr("fill", "steelblue")
@@ -92,8 +95,10 @@ export default function Intensity({ data }) {
         tooltip
           .style("display", "block")
           .html(
-            `Intensity: ${d.intensity}<br>Date: ${new Date(
-              d.published
+            `${yAxisCapitalize} : ${
+              d[yAxis]
+            }<br> ${xAxisCapitalize} Date: ${new Date(
+              d[xAxis]
             ).toLocaleDateString()}`
           )
           .style("left", event.pageX + 5 + "px")
@@ -108,7 +113,6 @@ export default function Intensity({ data }) {
         !svgRef.current.contains(event.target) &&
         !detailButtonRef.current?.contains(event.target)
       ) {
-        // console.log(event.target);
         setSelectedData(null);
       }
     };
@@ -124,7 +128,7 @@ export default function Intensity({ data }) {
   return (
     <div>
       <h2 className="text-1xl text-center">
-        Intensity vs. Published Date Graph
+        {yAxisCapitalize} vs. {xAxisCapitalize} Date Graph
       </h2>
       <svg
         ref={svgRef}
@@ -137,12 +141,12 @@ export default function Intensity({ data }) {
       {selectedData && (
         <div className="container flex items-center justify-evenly mt-4 ">
           <p>
-            <strong>Intensity: </strong>
-            {selectedData.intensity}
+            <strong>{yAxisCapitalize}: </strong>
+            {selectedData[yAxis]}
           </p>
           <p>
-            <strong>Publish Date: </strong>
-            {new Date(selectedData.published).toLocaleDateString()}
+            <strong>{xAxisCapitalize} Date: </strong>
+            {new Date(selectedData[xAxis]).toLocaleDateString()}
           </p>
           <CustomDrawer data={selectedData} ref={detailButtonRef} />
         </div>

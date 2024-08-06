@@ -15,7 +15,9 @@ export default function CustomTable({ data }) {
         <TableBody className="">
           {Object.entries(data).map(([key, value]) => (
             <TableRow key={key} className="">
-              <TableCell className="font-medium">{key.toUpperCase()}</TableCell>
+              <TableCell className="font-medium">
+                {key.charAt(0).toUpperCase() + key.slice(1)}
+              </TableCell>
               <TableCell>{value}</TableCell>
             </TableRow>
           ))}

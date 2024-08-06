@@ -18,7 +18,9 @@ const CustomDrawer = forwardRef(({ data }, ref) => {
   return (
     <Drawer>
       <Button ref={ref}>
-        <DrawerTrigger>Click here to see Details</DrawerTrigger>
+        <DrawerTrigger>
+          Click here to see more details on selected data
+        </DrawerTrigger>
       </Button>
       <DrawerContent>
         <DrawerHeader>

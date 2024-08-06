@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import IntensityGraph from "./components/IntensityGraph";
+import ScatterPlotGraph from "./components/ScatterPlotGraph";
 // import Temp from "./components/Temp";
 import FilterData from "./components/FilterData";
 
 function App() {
   const [data, setData] = useState(null);
   const [dataForGraph, setDataForGraph] = useState(null);
+  const [xAxis, setXAxis] = useState("published");
+  const [yAxis, setYAxis] = useState("intensity");
 
   useEffect(() => {
     fetch("http://localhost:5000/data")
@@ -30,8 +32,13 @@ function App() {
 
       {dataForGraph && (
         <>
-          <FilterData data={data} setDataForGraph={setDataForGraph} />
-          <IntensityGraph data={dataForGraph} />
+          <FilterData
+            data={data}
+            setDataForGraph={setDataForGraph}
+            setXAxis={setXAxis}
+            setYAxis={setYAxis}
+          />
+          <ScatterPlotGraph data={dataForGraph} xAxis={xAxis} yAxis={yAxis} />
         </>
       )}
       {/* <Temp /> */}
