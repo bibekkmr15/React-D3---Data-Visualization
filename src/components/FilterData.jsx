@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
+import CustomSelect from "./CustomSelect";
 
-const FilterComponent = ({ data, setDataForGraph }) => {
+const FilterData = ({ data, setDataForGraph }) => {
   const [year, setYear] = useState("");
   const [intensity, setIntensity] = useState("");
+  const [sector, setSector] = useState("");
+
+  const uniqueSectors = [
+    ...new Set(
+      data.map((item) => item.sector).filter((sector) => sector !== "")
+    ),
+  ];
 
   const handleYearChange = (e) => {
     setYear(e.target.value);
@@ -22,7 +30,11 @@ const FilterComponent = ({ data, setDataForGraph }) => {
       const matchesIntensity = intensity
         ? item.intensity === parseInt(intensity, 10)
         : true;
-      return matchesYear && matchesIntensity;
+      let matchesSector = false;
+      if (sector === "All Sectors" || item.sector === sector) {
+        matchesSector = true;
+      }
+      return matchesYear && matchesIntensity && matchesSector;
     });
 
     setDataForGraph(newFilteredData);
@@ -33,6 +45,15 @@ const FilterComponent = ({ data, setDataForGraph }) => {
       <h2 className="text-xl font-bold ">Filter Data</h2>
 
       <form onSubmit={handleFilterSubmit} className="flex ml-10">
+        <label>
+          <strong className="mr-2">Sector:</strong>
+          <CustomSelect
+            options={["All Sectors", ...uniqueSectors]}
+            setValue={setSector}
+            placeholder="Select sector"
+          />
+        </label>
+        <br />
         <label>
           <strong className="mr-2">Published Year:</strong>
           <input
@@ -59,4 +80,4 @@ const FilterComponent = ({ data, setDataForGraph }) => {
   );
 };
 
-export default FilterComponent;
+export default FilterData;

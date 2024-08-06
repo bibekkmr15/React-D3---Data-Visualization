@@ -15,7 +15,7 @@ export default function ScatterPlotGraph({ data, xAxis, yAxis }) {
   const xAxisArray = data.map((item) => new Date(item[xAxis]));
 
   const width = window.innerWidth * 0.8;
-  const height = window.innerHeight * 0.7;
+  const height = window.innerHeight * 0.5;
 
   useEffect(() => {
     if (!svgRef.current) return;
