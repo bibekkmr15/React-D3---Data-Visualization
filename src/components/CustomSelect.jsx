@@ -14,13 +14,17 @@ export default function CustomSelect({ options, setValue, placeholder }) {
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option} value={option}>
-              {typeof option === "number"
-                ? option
-                : `${option?.charAt(0).toUpperCase()}${option.slice(1)}`}
-            </SelectItem>
-          ))}
+          {options.map((option) => {
+            const displayValue = isNaN(Number(option))
+              ? `${option?.charAt(0).toUpperCase()}${option.slice(1)}`
+              : Number(option);
+
+            return (
+              <SelectItem key={option} value={option}>
+                {displayValue}
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
     </>

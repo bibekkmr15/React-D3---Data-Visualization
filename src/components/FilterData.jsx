@@ -8,6 +8,9 @@ const initialState = {
   sector: "",
   topic: "",
   region: "",
+  country: "",
+  start_year: "",
+  end_year: "",
 };
 
 const reducer = (state, action) => {
@@ -23,6 +26,15 @@ const reducer = (state, action) => {
     }
     case "SET_REGION": {
       return { ...state, region: action.payload };
+    }
+    case "SET_COUNTRY": {
+      return { ...state, country: action.payload };
+    }
+    case "SET_START_YEAR": {
+      return { ...state, start_year: action.payload };
+    }
+    case "SET_END_YEAR": {
+      return { ...state, end_year: action.payload };
     }
     default:
       return state;
@@ -54,7 +66,25 @@ const FilterData = ({ data, setDataForGraph }) => {
     ),
   ];
 
-  // console.log(countryArray);
+  const start_yearArray = [
+    ...new Set(
+      data
+        .map((item) => item.start_year)
+        .filter((start_year) => start_year !== "" && start_year !== null)
+        .sort((a, b) => a - b)
+    ),
+  ];
+
+  const end_yearArray = [
+    ...new Set(
+      data
+        .map((item) => item.end_year)
+        .filter((end_year) => end_year !== "" && end_year !== null)
+        .sort((a, b) => a - b)
+    ),
+  ];
+
+  console.log(start_yearArray);
 
   const handleFilterSubmit = (e) => {
     e.preventDefault();
@@ -77,7 +107,7 @@ const FilterData = ({ data, setDataForGraph }) => {
       }
       let matchesTopic = false;
       if (
-        state.topic === "All Topics" ||
+        state.topic === "all topics" ||
         item.topic === state.topic ||
         state.topic === ""
       ) {
@@ -85,21 +115,48 @@ const FilterData = ({ data, setDataForGraph }) => {
       }
       let matchesRegion = false;
       if (
-        state.region === "All Regions" ||
+        state.region === "all regions" ||
         item.region === state.region ||
         state.region === ""
       ) {
         matchesRegion = true;
+      }
+      let matchesCountry = false;
+      if (
+        state.country === "all countries" ||
+        item.country === state.country ||
+        state.country === ""
+      ) {
+        matchesCountry = true;
+      }
+      let matchesStartYear = false;
+      if (
+        state.start_year === "all start years" ||
+        item.start_year == state.start_year ||
+        state.start_year === ""
+      ) {
+        matchesStartYear = true;
+      }
+      let matchesEndYear = false;
+      if (
+        state.end_year === "all end years" ||
+        item.end_year == state.end_year ||
+        state.end_year === ""
+      ) {
+        matchesEndYear = true;
       }
       return (
         matchesPublishedYear &&
         matchesIntensity &&
         matchesSector &&
         matchesTopic &&
-        matchesRegion
+        matchesRegion &&
+        matchesCountry &&
+        matchesStartYear &&
+        matchesEndYear
       );
     });
-    console.log(newFilteredData.length);
+    // console.log(newFilteredData.length);
     setDataForGraph(newFilteredData);
   };
 
@@ -122,7 +179,7 @@ const FilterData = ({ data, setDataForGraph }) => {
         <label className="flex flex-col">
           <strong className="">Topic</strong>
           <CustomSelect
-            options={["All Topics", ...topicsArray]}
+            options={["all topics", ...topicsArray]}
             setValue={(value) =>
               dispatch({ type: "SET_TOPIC", payload: value })
             }
@@ -133,11 +190,44 @@ const FilterData = ({ data, setDataForGraph }) => {
         <label className="flex flex-col">
           <strong className="">Region</strong>
           <CustomSelect
-            options={["All Regions", ...regionArray]}
+            options={["all regions", ...regionArray]}
             setValue={(value) =>
               dispatch({ type: "SET_REGION", payload: value })
             }
             placeholder="Select region"
+          />
+        </label>
+        <br />
+        <label className="flex flex-col">
+          <strong className="">Country</strong>
+          <CustomSelect
+            options={["all countries", ...countryArray]}
+            setValue={(value) =>
+              dispatch({ type: "SET_COUNTRY", payload: value })
+            }
+            placeholder="Select country"
+          />
+        </label>
+        <br />
+        <label className="flex flex-col">
+          <strong className="">Start Year</strong>
+          <CustomSelect
+            options={["all start years", ...start_yearArray]}
+            setValue={(value) =>
+              dispatch({ type: "SET_START_YEAR", payload: value })
+            }
+            placeholder="Select start year"
+          />
+        </label>
+        <br />
+        <label className="flex flex-col">
+          <strong className="">End Year</strong>
+          <CustomSelect
+            options={["all end years", ...end_yearArray]}
+            setValue={(value) =>
+              dispatch({ type: "SET_END_YEAR", payload: value })
+            }
+            placeholder="Select end year"
           />
         </label>
         <br />
