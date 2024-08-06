@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import ScatterPlotGraph from "./components/ScatterPlotGraph";
-// import Temp from "./components/Temp";
 import FilterData from "./components/FilterData";
 import SelectAxes from "./components/SelectAxes";
 
@@ -38,7 +37,6 @@ function App() {
           <ScatterPlotGraph data={dataForGraph} xAxis={xAxis} yAxis={yAxis} />
         </>
       )}
-      {/* <Temp /> */}
     </div>
   );
 }

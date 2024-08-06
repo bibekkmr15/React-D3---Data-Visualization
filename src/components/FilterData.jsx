@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import { Button } from "./ui/button";
 import CustomSelect from "./CustomSelect";
+import { Input } from "./ui/input";
 
 const initialState = {
   published_year: "",
@@ -12,7 +13,9 @@ const initialState = {
   start_year: "",
   end_year: "",
 };
-
+//
+//
+//
 const reducer = (state, action) => {
   switch (action.type) {
     case "SET_PUBLISHED_YEAR":
@@ -36,6 +39,8 @@ const reducer = (state, action) => {
     case "SET_END_YEAR": {
       return { ...state, end_year: action.payload };
     }
+    case "RESET_FILTERS":
+      return initialState;
     default:
       return state;
   }
@@ -84,7 +89,7 @@ const FilterData = ({ data, setDataForGraph }) => {
     ),
   ];
 
-  console.log(start_yearArray);
+  // console.log(start_yearArray);
 
   const handleFilterSubmit = (e) => {
     e.preventDefault();
@@ -175,7 +180,6 @@ const FilterData = ({ data, setDataForGraph }) => {
             placeholder="Select sector"
           />
         </label>
-        <br />
         <label className="flex flex-col">
           <strong className="">Topic</strong>
           <CustomSelect
@@ -186,7 +190,6 @@ const FilterData = ({ data, setDataForGraph }) => {
             placeholder="Select topic"
           />
         </label>
-        <br />
         <label className="flex flex-col">
           <strong className="">Region</strong>
           <CustomSelect
@@ -197,7 +200,6 @@ const FilterData = ({ data, setDataForGraph }) => {
             placeholder="Select region"
           />
         </label>
-        <br />
         <label className="flex flex-col">
           <strong className="">Country</strong>
           <CustomSelect
@@ -208,7 +210,6 @@ const FilterData = ({ data, setDataForGraph }) => {
             placeholder="Select country"
           />
         </label>
-        <br />
         <label className="flex flex-col">
           <strong className="">Start Year</strong>
           <CustomSelect
@@ -219,7 +220,6 @@ const FilterData = ({ data, setDataForGraph }) => {
             placeholder="Select start year"
           />
         </label>
-        <br />
         <label className="flex flex-col">
           <strong className="">End Year</strong>
           <CustomSelect
@@ -230,10 +230,9 @@ const FilterData = ({ data, setDataForGraph }) => {
             placeholder="Select end year"
           />
         </label>
-        <br />
-        <label className="flex flex-col">
+        <label className="flex flex-col w-32">
           <strong className="mr-2">Published Year:</strong>
-          <input
+          <Input
             type="number"
             value={state.published_year}
             onChange={(e) =>
@@ -242,10 +241,9 @@ const FilterData = ({ data, setDataForGraph }) => {
             placeholder="Enter published year"
           />
         </label>
-        <br />
-        <label className="flex flex-col">
+        <label className="flex flex-col mx-2 w-32">
           <strong className="mr-2">Intensity:</strong>
-          <input
+          <Input
             type="number"
             value={state.intensity}
             onChange={(e) =>
@@ -254,8 +252,18 @@ const FilterData = ({ data, setDataForGraph }) => {
             placeholder="Enter intensity"
           />
         </label>
-        <br />
-        <Button type="submit">Redraw Graph</Button>
+        <div className="flex flex-col">
+          <Button type="submit" className="mb-1 bg-slate-200" variant="outline">
+            Redraw Graph
+          </Button>
+          <Button
+            variant="destructive"
+            type="submit"
+            onClick={() => dispatch({ type: "RESET_FILTERS" })}
+          >
+            Reset Filters
+          </Button>
+        </div>
       </form>
     </div>
   );
