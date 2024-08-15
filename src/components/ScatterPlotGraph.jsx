@@ -70,7 +70,7 @@ export default function ScatterPlotGraph({ data, xAxis, yAxis }) {
       .attr("cx", (d) => x(new Date(d[xAxis])))
       .attr("cy", (d) => y(d[yAxis]))
       .attr("r", 5)
-      .attr("opacity", 0.3)
+      .attr("opacity", 0.7)
       .attr("fill", "steelblue")
       .on("click", (event, d) => {
         setSelectedData(d);

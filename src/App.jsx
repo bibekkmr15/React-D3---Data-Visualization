@@ -3,6 +3,8 @@ import ScatterPlotGraph from "./components/ScatterPlotGraph";
 import FilterData from "./components/FilterData";
 import SelectAxes from "./components/SelectAxes";
 
+import jsondata from "./jsondata.json";
+
 function App() {
   const [data, setData] = useState(null);
   const [dataForGraph, setDataForGraph] = useState(null);
@@ -10,20 +12,25 @@ function App() {
   const [yAxis, setYAxis] = useState("intensity");
 
   useEffect(() => {
-    fetch("http://localhost:5000/data")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then((dataFromDB) => {
-        setData(dataFromDB);
-        setDataForGraph(dataFromDB);
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      });
+    // /* ------------------------- for data from api call ------------------------- */
+    // fetch("http://localhost:5000/data")
+    //   .then((res) => {
+    //     if (!res.ok) {
+    //       throw new Error("Network response was not ok");
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((dataFromDB) => {
+    //     setData(dataFromDB);
+    //     setDataForGraph(dataFromDB);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch error:", error);
+    //   });
+
+    /* ------------------------- for data from jsondata.json ------------------------- */
+    setData(jsondata);
+    setDataForGraph(jsondata);
   }, []);
 
   return (
